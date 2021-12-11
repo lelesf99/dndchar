@@ -1,0 +1,2 @@
+(this.webpackJsonpdndchar=this.webpackJsonpdndchar||[]).push([[9],{56:function(n,c,e){"use strict";e.r(c),e.d(c,"default",(function(){return t}));e(6);var r=e(11);function t(n){return Object(r.jsx)("div",{children:Object(r.jsxs)("h1",{children:[" Bem vindo ",n.user.uid]})})}}}]);
+//# sourceMappingURL=9.1a7e33f5.chunk.js.map
