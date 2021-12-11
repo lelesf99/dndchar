@@ -1,0 +1,38 @@
+.drag-card {
+    background-color: var(--light-color2);
+    box-shadow: var(--box-shadow-light);
+    border-radius: var(--border-radius);
+    min-width: 280px;
+    overflow: hidden;
+    transition: flex 100ms;
+}
+
+.drag-card:not(.show) {
+    min-width: 0;
+    flex-grow: 0;
+    flex-basis: 0;
+}
+
+.drag-card .card-header {
+    border-bottom: #00000020 solid 1px;
+    padding: 1em;
+}
+
+.drag-card .card-body {
+    border-bottom: #00000020 solid 1px;
+    padding: 1em;
+}
+
+.drag-card .card-footer {
+    padding: 1em;
+}
+
+.drag-card {
+    flex: 1 1 25%;
+}
+
+.drag-card:hover,
+.drag-card:focus {
+    transform: scale(1.03125);
+    z-index: 1;
+}

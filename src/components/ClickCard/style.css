@@ -1,0 +1,32 @@
+.click-card {
+    background-color: var(--white);
+    box-shadow: var(--box-shadow-light);
+    border-radius: var(--border-radius);
+    min-width: 280px;
+}
+
+.click-card .card-header {
+    border-bottom: #00000020 solid 1px;
+    padding: 1em;
+}
+
+.click-card .card-body {
+    border-bottom: #00000020 solid 1px;
+    padding: 1em;
+}
+
+.click-card .card-footer {
+    padding: 1em;
+}
+
+.click-card {
+    cursor: pointer;
+    transition: transform 250ms var(--bounce);
+    flex: 1 1 25%;
+}
+
+.click-card:hover,
+.click-card:focus {
+    transform: scale(1.03125);
+    z-index: 1;
+}

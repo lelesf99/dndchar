@@ -1,0 +1,93 @@
+.char-create-container {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    align-content: flex-start;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.char-create-container h1, h2 {
+    display: block;
+    width: 100%;
+}
+
+.form-container {
+    width: 100%;
+    max-width: unset;
+    position: unset;
+    transform: none;
+    top: 1rem;
+    max-width: unset;
+    max-height: unset;
+}
+
+.input-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.input-row input {
+    flex: unset;
+    width: unset;
+    min-width: unset;
+}
+
+.input-row .char-name-input {
+    min-width: 0;
+    flex: 1 1 calc(80% - 1rem);
+}
+
+.input-row .char-level-input {
+    min-width: 0;
+    flex: 1 1 20%;
+}
+
+.input-row .char-hab-input,
+.input-row .char-hab-roll,
+.input-row .char-hab-drag {
+    min-width: 100px;
+    flex: 0 1 calc(16% - 1rem);
+}
+
+.char-hab-drag {
+    user-select: none;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: calc(16% - 1rem);
+    max-width: 200px;
+}
+
+.click-card.class-card {
+    flex: 1 1 25%;
+    position: relative;
+    box-shadow: 0px 0px 0px 0px var(--light-color3);
+    transition: transform 250ms var(--bounce), box-shadow 250ms;
+}
+
+.click-card.class-card.active {
+    transform: scale(1.03125);
+    box-shadow: 0px 0px 0px 3px var(--light-color3);
+    z-index: 1;
+}
+
+button.btn.roll-btn.sec {
+    max-width: 250px;
+}
+
+@media screen and (max-width: 640px) {
+
+    .input-row .char-hab-input,
+    .input-row .char-hab-roll {
+        min-width: 50px;
+        flex: 1 1 calc(33% - 1rem);
+    }
+}

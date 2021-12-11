@@ -1,0 +1,80 @@
+.sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: 100%;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    box-shadow: var(--box-shadow-light);
+    z-index: 1;
+    transition: width 400ms cubic-bezier(0.5, 1.35, 0.5, 1);
+}
+
+.sidebar-title {
+    position: relative;
+    width: 80%;
+}
+
+.sidebar.shown {
+    width: 20rem;
+}
+
+.sidebar.hidden {
+    width: 4rem;
+}
+
+.sidebar.hidden .btn.btn-sidebar span {
+    transition: opacity 50ms;
+    opacity: 0;
+}
+
+.btn.btn-sidebar {
+    font-size: 18px;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--dark-color);
+    color: var(--white);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    flex: 0 1 4rem;
+}
+
+.btn.btn-sidebar.active {
+    pointer-events: none;
+    color: var(--dark-color);
+    z-index: 2;
+}
+
+.btn.btn-sidebar.active::after {
+    opacity: 1;
+}
+
+.btn.btn-sidebar.log-out {
+    margin-top: auto;
+}
+
+.btn.btn-sidebar span {
+    transition: opacity 400ms;
+}
+
+.btn.btn-sidebar:hover,
+.btn.btn-sidebar:focus {
+    color: var(--dark-color);
+}
+
+.btn.btn-sidebar:focus {
+    outline: none;
+}
+
+.btn.btn-sidebar::after {
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--light-color);
+}
+
+@media screen and (max-width: 640px) {
+    .sidebar {
+        position: fixed;
+    }
+}

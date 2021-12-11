@@ -1,0 +1,58 @@
+  /* Three lines ---------------------------*/
+  .mobile-nav-toggle {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    margin-bottom: 1rem;
+    width: 2rem;
+    height: 2rem;
+    background: none;
+    border: none;
+  }
+
+  .mobile-nav-toggle:hover {
+    cursor: pointer;
+  }
+
+  .mobile-nav-toggle span,
+  .mobile-nav-toggle span::before,
+  .mobile-nav-toggle span::after {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--light-color);
+    transition: transform 400ms 50ms var(--bounce), opacity 400ms 50ms;
+  }
+
+  .mobile-nav-toggle span::before,
+  .mobile-nav-toggle span::after {
+    content: '';
+  }
+
+  /* -------------------------------------- */
+  /* transforming between X and three lines */
+  .mobile-nav-toggle.shown span {
+    transform:
+      translateY(.8rem) rotate(45deg);
+  }
+
+  .mobile-nav-toggle.shown span::before {
+    transform:
+      translateY(-.8rem) rotate(90deg);
+  }
+
+  .mobile-nav-toggle.shown span::after {
+    transition: opacity 50ms;
+    opacity: 0;
+  }
+
+  .mobile-nav-toggle span::before {
+    top: .8rem;
+  }
+
+  .mobile-nav-toggle span::after {
+    top: 1.6rem;
+  }
