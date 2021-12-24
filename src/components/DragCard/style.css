@@ -4,13 +4,27 @@
     border-radius: var(--border-radius);
     min-width: 280px;
     overflow: hidden;
-    transition: flex 100ms;
+    transition: none;
+    touch-action: none;
+}
+
+.drag-card.dragging {
+    background-color: var(--danger-color);
+    box-shadow: var(--box-shadow-heavy);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.drag-card.dragging.droppable {
+    opacity: .8;
+    background-color: var(--light-color3);
+
 }
 
 .drag-card:not(.show) {
-    min-width: 0;
-    flex-grow: 0;
-    flex-basis: 0;
+    transform: scale(0);
+    opacity: 0;
+    overflow: hidden;
 }
 
 .drag-card .card-header {

@@ -1,12 +1,15 @@
 import './style.css';
 import React, { useState, useEffect, useRef } from 'react';
-import { mousePos } from '../../Utils';
+import { useSpring, animated } from "react-spring"
+import { useGesture } from "@use-gesture/react";
 
 export default function DragCard(props) {
 
     const [drag, setDrag] = useState(false);
+    const [droppable, setDroppable] = useState(false);
 
     const cardRef = useRef();
+
 
     useEffect(() => {
         if (props.dragData === cardRef.current.childNodes[0] && props.isDragging) {
@@ -17,35 +20,53 @@ export default function DragCard(props) {
     }, [props.dragData, props.isDragging]);
 
     useEffect(() => {
-        let pos = [0, 0];
-        let animReq;
-        let card = cardRef.current;
-
-        let cardOrigin = [
-            card.getBoundingClientRect().x + card.getBoundingClientRect().width / 2,
-            card.getBoundingClientRect().y + card.getBoundingClientRect().height / 2
-        ];
-        let relMousePos = [0, 0];
-        if (drag) {
-
-            function animate() {
-                relMousePos = sub(mousePos, cardOrigin);
-                pos = relMousePos;
-                cardRef.current.style.setProperty("transform", `translate(${pos[0]}px,  ${pos[1]}px)`)
-                animReq = requestAnimationFrame(animate);
+        if (props.currTarget) {
+            if (props.currTarget.classList.contains("dropzone")) {
+                setDroppable(true);
+            } else {
+                setDroppable(false);
             }
-            animate();
         }
-        return () => {
-            cancelAnimationFrame(animReq);
-            pos = [0, 0];
-            if (card)
-                card.style.setProperty("transform", `translate(${pos[0]}px,  ${pos[1]}px)`)
-        };
-    }, [drag]);
+
+    }, [props.currTarget]);
+    const [{ x, y, scale, background, boxShadow }, api] = useSpring(
+        () => ({
+            scale: 1,
+            x: 0,
+            y: 0,
+            config: { mass: 5, tension: 500, friction: 50 },
+        })
+    )
+    const bind = useGesture(
+        {
+            onDrag: ({ active, movement: [x, y] }) =>
+                api({ x: active ? x : 0, y: active ? y : 0, scale: active ? 1 : 1.1 }),
+            onDragEnd: (active) => api({ scale: active ? 1 : 1.1 }),
+            onMove: ({ dragging }) =>
+                !dragging &&
+                api({
+                    scale: 1.1,
+                }),
+            onHover: ({ hovering }) =>
+                !hovering && api({ scale: 1 }),
+        }, {
+        drag: {
+
+            pointer: {
+                capture: false,
+                touch: false
+            }
+
+        }
+    }
+    )
 
     return (
-        <div ref={cardRef} className={`card drag-card ${props.className !== undefined ? props.className : ""} ${props.body !== 0 ? "show" : ""}`}>
+        <animated.div ref={cardRef} {...bind()} style={{
+            x, y, scale: scale, background: background, boxShadow: boxShadow
+        }}
+            id={props.id}
+            className={`card drag-card ${props.className !== undefined ? props.className : ""} ${drag ? "dragging" : ""} ${droppable ? "droppable" : ""} ${props.body !== 0 ? "show" : ""} `}>
             {props.header && <div className="card-header">
                 {props.header}
             </div>}
@@ -55,33 +76,6 @@ export default function DragCard(props) {
             {props.footer && <div className="card-footer">
                 {props.footer}
             </div>}
-        </div>
+        </animated.div>
     );
 }
-
-// function add(v, u) {
-//     return [v[0] + u[0], v[1] + u[1]];
-// }
-
-function sub(v, u) {
-    return [v[0] - u[0], v[1] - u[1]];
-}
-
-// function mult(v, k) {
-//     return [v[0] * k, v[1] * k];
-// }
-// function magSq(v) {
-//     return v[0] * v[0] + v[1] * v[1];
-// };
-// function mag(v) {
-//     return Math.sqrt(magSq(v));
-// }
-// function normalize(v) {
-//     const len = mag(v);
-//     if (len !== 0)
-//         return mult(v, 1 / len);
-// }
-
-// function dist(v, u) {
-//     return Math.sqrt((v[0] - u[0]) * (v[0] - u[0]) + (v[1] - u[1]) * (v[1] - u[1]));
-// }

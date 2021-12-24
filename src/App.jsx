@@ -31,9 +31,7 @@ const Home = lazy(() => import('./routes/Home'));
 function App() {
 
   const [user, setUser] = useState(null);
-  const [dragData, setDragData] = useState(null);
-  const [currTarget, setCurrTarget] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
+
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -47,35 +45,15 @@ function App() {
     }
   });
 
-  // useEffect(() => {
-  //   console.log(isDragging, currTarget, dragData);
-  // }, [dragData, currTarget]);
-
-  function getData(e) {
-    setDragData(e.target);
-    setIsDragging(true);
-  }
-
-  function setData(e) {
-    setIsDragging(false);
-  }
-
   return (
-    <div className='App'
-      onMouseDown={(e) => getData(e)}
-      onMouseMove={(e) => { if (isDragging && e.target !== currTarget) setCurrTarget(e.target) }}
-      onMouseUp={(e) => setData(e)}
-      onTouchStart={(e) => getData(e)}
-      onTouchMove={(e) => { if (isDragging && document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) !== currTarget) setCurrTarget(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)) }}
-      onTouchEnd={(e) => setData(e)}
-    >
+    <div className='App'>
       <Suspense fallback={<div className="loading"></div>}>
         <Routes>
           <Route path="/" element={<Login user={user}></Login>} />
           <Route path="signup" element={<Signup></Signup>} />
           <Route path=":uid" element={<Profile user={user}></Profile>} >
             <Route path="" element={<Home user={user}></Home>} />
-            <Route path="CharBuilder" element={<CharBuilder user={user} isDragging={isDragging} dragData={dragData} currTarget={currTarget}></CharBuilder>} />
+            <Route path="CharBuilder" element={<CharBuilder user={user} ></CharBuilder>} />
           </Route>
         </Routes>
       </Suspense>

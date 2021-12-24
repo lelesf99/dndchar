@@ -1,7 +1,7 @@
 import "./style.css";
 import React, { useState, useEffect } from 'react';
 import FormContainer from '../../components/FormContainer';
-import ClickCard from "../../components/ClickCard";
+import RaceCard from "../../components/RaceCard";
 import Button from "../../components/Button"
 import HabCard from "../../components/HabCard";
 
@@ -12,7 +12,7 @@ export default function CharBuilder(props) {
 
     const [willRollHab, setWillRollHab] = useState(false);
     const [habRolls, setHabRolls] = useState([]);
-    const [habVal, setHabVal] = useState({
+    const [habVals, setHabVals] = useState({
         str: 0,
         dex: 0,
         con: 0,
@@ -22,79 +22,83 @@ export default function CharBuilder(props) {
     });
     const [selectClass, setSelectClass] = useState('');
 
-    useEffect(() => {
-        console.log(habVal);
-    }, [habVal]);
+    const [dragData, setDragData] = useState(null);
+    const [currTarget, setCurrTarget] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
+
+    // useEffect(() => {
+    //     console.log(currTarget);
+    // }, [currTarget]);
 
 
-    function confirmHabRoll(hab, value) {
-        let tmpHabVal = {
-            str: habVal.str,
-            dex: habVal.dex,
-            con: habVal.con,
-            int: habVal.int,
-            wis: habVal.wis,
-            cha: habVal.cha,
+    function confirmHabRoll(hab, value, ref) {
+        if (isNaN(value) || value <= 0 || value > 20) return;
+        let tmpHabVals = {
+            str: habVals.str,
+            dex: habVals.dex,
+            con: habVals.con,
+            int: habVals.int,
+            wis: habVals.wis,
+            cha: habVals.cha,
         };
         switch (hab) {
             case "str":
-                if (habVal.str !== 0) return;
-                tmpHabVal.str = value;
-                setHabVal(tmpHabVal);
+                if (habVals.str !== 0) return;
+                tmpHabVals.str = value;
+                setHabVals(tmpHabVals);
                 break;
             case "dex":
-                if (habVal.dex !== 0) return;
-                tmpHabVal.dex = value;
-                setHabVal(tmpHabVal);
+                if (habVals.dex !== 0) return;
+                tmpHabVals.dex = value;
+                setHabVals(tmpHabVals);
                 break;
             case "con":
-                if (habVal.con !== 0) return;
-                tmpHabVal.con = value;
-                setHabVal(tmpHabVal);
+                if (habVals.con !== 0) return;
+                tmpHabVals.con = value;
+                setHabVals(tmpHabVals);
                 break;
             case "int":
-                if (habVal.int !== 0) return;
-                tmpHabVal.int = value;
-                setHabVal(tmpHabVal);
+                if (habVals.int !== 0) return;
+                tmpHabVals.int = value;
+                setHabVals(tmpHabVals);
                 break;
             case "wis":
-                if (habVal.wis !== 0) return;
-                tmpHabVal.wis = value;
-                setHabVal(tmpHabVal);
+                if (habVals.wis !== 0) return;
+                tmpHabVals.wis = value;
+                setHabVals(tmpHabVals);
                 break;
             case "cha":
-                if (habVal.cha !== 0) return;
-                tmpHabVal.cha = value;
-                setHabVal(tmpHabVal);
+                if (habVals.cha !== 0) return;
+                tmpHabVals.cha = value;
+                setHabVals(tmpHabVals);
                 break;
             default:
                 break;
 
         }
         const temp = habRolls;
-        const index = temp.indexOf(value);
-        temp[index] = 0;
+        temp[parseInt(ref.parentNode.id)] = 0;
         setHabRolls(temp);
     }
     function cancelHabRoll(hab, value) {
         switch (hab) {
             case "str":
-                setHabVal({ ...habVal, str: 0, });
+                setHabVals({ ...habVals, str: 0, });
                 break;
             case "dex":
-                setHabVal({ ...habVal, dex: 0, });
+                setHabVals({ ...habVals, dex: 0, });
                 break;
             case "con":
-                setHabVal({ ...habVal, con: 0, });
+                setHabVals({ ...habVals, con: 0, });
                 break;
             case "int":
-                setHabVal({ ...habVal, int: 0, });
+                setHabVals({ ...habVals, int: 0, });
                 break;
             case "wis":
-                setHabVal({ ...habVal, wis: 0, });
+                setHabVals({ ...habVals, wis: 0, });
                 break;
             case "cha":
-                setHabVal({ ...habVal, cha: 0, });
+                setHabVals({ ...habVals, cha: 0, });
                 break;
             default:
                 break;
@@ -104,8 +108,33 @@ export default function CharBuilder(props) {
         temp[index] = value;
         setHabRolls(temp);
     }
+
+    function startDrag(e) {
+        setDragData(e.target);
+        setIsDragging(true);
+    }
+    function updateDrag(e) {
+        if (e.touches) {
+            if (isDragging && document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) !== currTarget)
+                setCurrTarget(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY))
+        } else {
+            if (isDragging && e.target !== currTarget)
+                setCurrTarget(e.target)
+        }
+    }
+    function endDrag(e) {
+        setIsDragging(false);
+    }
+
     return (
-        <div className='char-create-container' >
+        <div className='char-create-container'
+            onMouseDown={(e) => startDrag(e)}
+            onMouseMove={(e) => updateDrag(e)}
+            onMouseUp={(e) => endDrag(e)}
+            onTouchStart={(e) => startDrag(e)}
+            onTouchMove={(e) => updateDrag(e)}
+            onTouchEnd={(e) => endDrag(e)}
+        >
 
             <h1>Criar Personagem</h1>
             <FormContainer>
@@ -119,60 +148,17 @@ export default function CharBuilder(props) {
                     {
                         willRollHab ?
                             <>
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("str", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("str", habVal.str)}
-                                    hab="str"
-                                    value={habVal.str} />
-
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("dex", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("dex", habVal.dex)}
-                                    hab="dex"
-                                    value={habVal.dex} />
-
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("con", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("con", habVal.con)}
-                                    hab="con"
-                                    value={habVal.con} />
-
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("int", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("int", habVal.int)}
-                                    hab="int"
-                                    value={habVal.int} />
-
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("wis", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("wis", habVal.wis)}
-                                    hab="wis"
-                                    value={habVal.wis} />
-
-                                <HabCard
-                                    currTarget={props.currTarget}
-                                    dragData={props.dragData}
-                                    isDragging={props.isDragging}
-                                    confirmFn={() => confirmHabRoll("cha", parseInt(props.dragData.innerText))}
-                                    cancelFn={() => cancelHabRoll("cha", habVal.cha)}
-                                    hab="cha"
-                                    value={habVal.cha} />
-
+                                {Object.entries(habVals).map((hab, key) =>
+                                    <HabCard
+                                        key={key}
+                                        currTarget={currTarget}
+                                        dragData={dragData}
+                                        isDragging={isDragging}
+                                        confirmFn={confirmHabRoll}
+                                        cancelFn={cancelHabRoll}
+                                        hab={hab[0]}
+                                        value={hab[1]} />
+                                )}
                             </>
                             :
                             <>
@@ -189,7 +175,7 @@ export default function CharBuilder(props) {
                 </div>
 
                 <div className="input-row">
-                    {habRolls.map((roll, index) => <DragCard key={index} className='char-hab-drag' isDragging={props.isDragging} dragData={props.dragData} body={roll} />)}
+                    {habRolls.map((roll, index) => <DragCard id={index} key={index} className='char-hab-drag' isDragging={isDragging} currTarget={currTarget} dragData={dragData} body={roll} />)}
                 </div>
                 <div className="button-group">
 
@@ -199,49 +185,46 @@ export default function CharBuilder(props) {
                     }} ><span>Não vou rolar</span></Button>}
                     <Button className="roll-btn sec" onClick={() => {
                         setWillRollHab(true);
-                        if (habRolls.length === 0) {
-                            setHabVal({
-                                str: 0,
-                                dex: 0,
-                                con: 0,
-                                int: 0,
-                                wis: 0,
-                                cha: 0,
-                            })
-                            setHabRolls([...habRolls, Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab()]);
-                        } else {
-                            setHabVal({
-                                str: 0,
-                                dex: 0,
-                                con: 0,
-                                int: 0,
-                                wis: 0,
-                                cha: 0,
-                            })
-                            setHabRolls([Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab()]);
-                        }
+                        setHabVals({
+                            str: 0,
+                            dex: 0,
+                            con: 0,
+                            int: 0,
+                            wis: 0,
+                            cha: 0,
+                        })
+                        setHabRolls([Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab(), Char.rollHab()]);
                     }}><span>Rolar</span></Button>
                 </div>
             </FormContainer>
-            <h2 className={`class-card ${selectClass === 'ANAO' ? 'active' : ''}`}>Escolha uma Raça</h2>
-            <ClickCard
+            <h2 >Escolha uma Raça</h2>
+            <RaceCard className={`class-card ${selectClass === 'ANAO' ? 'active' : ''}`}
                 onClick={() => setSelectClass('ANAO')}
                 header={
                     <h3>Anão</h3>
                 }
-            ></ClickCard>
-            <ClickCard className={`class-card ${selectClass === 'HUMANO' ? 'active' : ''}`}
+                body={
+                    <p> Aumento no Valor de Habilidade. Seu valor de
+                        Constituição aumenta em 2.
+                        Idade. Anões tornam-se maduros na mesma
+                        proporção que os humanos, mas são considerados jovens
+                        até atingirem a idade de 50 anos. Em média, eles vivem
+                        350 anos.
+                    </p>
+                }
+            ></RaceCard>
+            <RaceCard className={`class-card ${selectClass === 'HUMANO' ? 'active' : ''}`}
                 onClick={() => setSelectClass('HUMANO')}
                 header={
                     <h3>Humano</h3>
                 }
-            ></ClickCard>
-            <ClickCard className={`class-card ${selectClass === 'ELFO' ? 'active' : ''}`}
+            ></RaceCard>
+            <RaceCard className={`class-card ${selectClass === 'ELFO' ? 'active' : ''}`}
                 onClick={() => setSelectClass('ELFO')}
                 header={
                     <h3>Elfo</h3>
                 }
-            ></ClickCard>
+            ></RaceCard>
         </div>
     );
 }

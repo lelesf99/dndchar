@@ -5,7 +5,6 @@
     border-radius: var(--border-radius);
     min-width: 100px;
     flex: 0 1 calc(16% - 1rem);
-    z-index: 10;
     transition: background-color 250ms;
 }
 

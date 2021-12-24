@@ -67,11 +67,9 @@ document.querySelector('.App').addEventListener('touchstart', process_touchstart
 document.querySelector('.App').addEventListener('touchmove', process_touchmove, false);
 
 function process_touchstart(event) {
-    // event.preventDefault();
     mousePos = [event.touches[0].clientX, event.touches[0].clientY];
 }
 // touchmove handler
 function process_touchmove(event) {
-    event.preventDefault();
     mousePos = [event.touches[0].clientX, event.touches[0].clientY];
 }
